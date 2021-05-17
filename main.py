@@ -9,19 +9,14 @@ The bot accepts 2 integers as arguments to its primary command, "generate." The 
 each team, and the 2nd is the amount of rerolls each player is given.
 
 Author: Ryan Tran
-Date Last Modified: 3/9/2021
+Date Last Modified: 5/17/2021
 """
 
 import discord
-import logging
+
+import logger
 import team_generator
 from discord.ext import commands
-
-logger = logging.getLogger('discord')
-logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger.addHandler(handler)
 
 bot = commands.Bot(command_prefix='.')
 
@@ -31,13 +26,18 @@ bot = commands.Bot(command_prefix='.')
 async def on_ready():
     print("ARAM Generator Bot Online: Hello, World!")
 
+    numServers = len(bot.guilds)
+    print(f"Connected on {numServers} Servers")
+
 
 # primary command, "generate"
 @bot.command(name='generate', aliases=['gen'])
 async def generate(ctx, players_per_team: int, rerolls_per_player: int):
+    logger.log(ctx.message.author)
+
     champions_per_team = players_per_team + players_per_team * rerolls_per_player
 
-    embed = discord.Embed(title='ARAM Generator', color=0x879BC0)
+    embed = discord.Embed(title='ARAM Teams Generator', color=0x64AADE)
     embed.add_field(name='Players Per Team', value=players_per_team, inline=True)
     embed.add_field(name='Rerolls Per Player', value=rerolls_per_player, inline=True)
     embed.add_field(name='Champions Per Team', value=champions_per_team, inline=True)
@@ -67,4 +67,4 @@ async def generate_error(ctx, error):
         await ctx.send(embed=embed)
 
 
-bot.run("ODAxMjEwNDU2MDU2Mzk3ODc0.YAdXYg.tg3qDQFzUJVtRAWqLt0kuHsCLFo")
+bot.run("")
