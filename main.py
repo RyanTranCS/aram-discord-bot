@@ -33,15 +33,19 @@ async def on_ready():
 # primary command, "generate"
 @bot.command(name='generate', aliases=['gen'])
 async def generate(ctx, players_per_team: int, rerolls_per_player: int):
+    # log author of command caller
     logger.log(ctx.message.author)
 
     champions_per_team = players_per_team + players_per_team * rerolls_per_player
 
+    # create embedded message to be sent on server
     embed = discord.Embed(title='ARAM Teams Generator', color=0x64AADE)
     embed.add_field(name='Players Per Team', value=players_per_team, inline=True)
     embed.add_field(name='Rerolls Per Player', value=rerolls_per_player, inline=True)
     embed.add_field(name='Champions Per Team', value=champions_per_team, inline=True)
 
+    # generate teams based on author's input
+    # returns tuple containing teams if successful; returns error message otherwise
     teams = team_generator.generate_teams(players_per_team, rerolls_per_player)
 
     if type(teams) is tuple:

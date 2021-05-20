@@ -8,5 +8,11 @@ Date Last Modified: 5/17/2021
 
 
 def log(author):
+    """
+    This method appends Discord usernames and IDs to a text file.
+
+    :param author: the author of the message
+    :return: none
+    """
     with open("users.txt", "a+") as usersFile:
         usersFile.write(f"{author}\n")

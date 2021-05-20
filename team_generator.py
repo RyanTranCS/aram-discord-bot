@@ -14,6 +14,7 @@ import random
 
 CHAMPIONS = []
 
+# appends string champion names to list
 with open('C:/Users/Ryan/PycharmProjects/HowlingAbyssDiscordBot/LoLChampions.txt') as f:
     CHAMPIONS = f.read().splitlines()
 
@@ -21,6 +22,16 @@ CHAMPIONS_LENGTH = len(CHAMPIONS)
 
 
 def generate_teams(players_per_team, rerolls):
+    """
+    This method calculates the amount of champions to be generated per team using the given input and supplies 2 calls
+    to the generate_team method with the processed info. If the input is valid, a tuple of 2 lists containing both teams
+    is returned. If the input is invalid, an error message is returned instead.
+
+    :param players_per_team: the amount of players per team
+    :param rerolls: the amount of rerolls each player should have
+    :return: valid input -> tuple of 2 lists | invalid input -> string error message
+    """
+
     champions_per_team = players_per_team + (players_per_team * rerolls)
     total_champions = champions_per_team * 2
 
@@ -47,8 +58,16 @@ def generate_teams(players_per_team, rerolls):
 
 
 def generate_team(available_champions, champions_per_team):
-    rand_max = len(available_champions) - 1
-    team = []
+    """
+    This method generates a team of random champions.
+
+    :param available_champions: a list of champions to randomly choose from, shared with another call of generate_team
+    :param champions_per_team: the amount of champions to be generated per team
+    :return: list containing strings of champion names
+    """
+
+    rand_max = len(available_champions) - 1     # upper bound of random number generator
+    team = []                                   # list to be returned
 
     for i in range(champions_per_team):
         random_champion_ID = random.randint(0, rand_max)                # inclusive range -> [0, rand_max]
@@ -61,6 +80,13 @@ def generate_team(available_champions, champions_per_team):
 
 
 def format_team(team):
+    """
+    This method converts a team contained within a list into a neatly formatted string.
+
+    :param team: list of strings of champion names
+    :return: none
+    """
+
     number_of_champions = len(team)
     str_team = ''
 
