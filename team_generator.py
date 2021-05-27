@@ -7,7 +7,7 @@ It accepts as input the amount of players per team and the amount of rolls each 
 which are arguments to the primary command "generate" in main.
 
 Author: Ryan Tran
-Date Last Modified: 3/9/2021
+Date Last Modified: 5/27/2021
 """
 
 import random
@@ -24,37 +24,23 @@ CHAMPIONS_LENGTH = len(CHAMPIONS)
 def generate_teams(players_per_team, rerolls):
     """
     This method calculates the amount of champions to be generated per team using the given input and supplies 2 calls
-    to the generate_team method with the processed info. If the input is valid, a tuple of 2 lists containing both teams
-    is returned. If the input is invalid, an error message is returned instead.
+    to the generate_team method with the processed info.
 
     :param players_per_team: the amount of players per team
     :param rerolls: the amount of rerolls each player should have
-    :return: valid input -> tuple of 2 lists | invalid input -> string error message
+    :return: valid input -> tuple of 2 lists (the teams)
     """
 
     champions_per_team = players_per_team + (players_per_team * rerolls)
-    total_champions = champions_per_team * 2
 
-    if total_champions > CHAMPIONS_LENGTH:
-        error_message = f"Invalid Input: The total number of champions requested to be generated" \
-                        f" must not exceed the total number of champions in the game ({CHAMPIONS_LENGTH}).\n\n" \
-                        f"Requested Number of Champions: \nPlayers Per Team ({players_per_team}) x Teams (2) x " \
-                        f"Rerolls Per Player ({rerolls}) = {total_champions}"
-        return error_message
+    # creates a copy of the global array for local use
+    # IMPORTANT: not creating a copy would have future function calls access a previously modified global array
+    local_champions = CHAMPIONS[:]
 
-    elif total_champions <= 0:
-        error_message = f"Invalid Input: The total amount of champions requested to be generated is 0 or less."
-        return error_message
+    team_1 = generate_team(local_champions, champions_per_team)
+    team_2 = generate_team(local_champions, champions_per_team)
 
-    else:
-        # creates a copy of the global array for local use
-        # IMPORTANT: not creating a copy would have future function calls access a previously modified global array
-        local_champions = CHAMPIONS[:]
-
-        team_1 = generate_team(local_champions, champions_per_team)
-        team_2 = generate_team(local_champions, champions_per_team)
-
-        return team_1, team_2
+    return team_1, team_2
 
 
 def generate_team(available_champions, champions_per_team):
