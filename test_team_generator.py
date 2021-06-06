@@ -3,7 +3,7 @@ This unit test checks that the teams generated from team_generator.py contain no
 It also checks that boundary values are selected using the random number generation process.
 
 Author: Ryan Tran
-Date Last Modified: 3/9/2021
+Date Last Modified: 6/6/2021
 """
 
 import unittest
@@ -25,14 +25,15 @@ class GeneratorTestCase(unittest.TestCase):
     combined_teams = teams[0] + teams[1]
 
     def test_for_duplicates(self):
+        champions_set = set()
         is_duplicate_present = False
 
-        self.combined_teams.sort()
-
-        for i in range(len(self.combined_teams) - 1):
-            if self.combined_teams[i] == self.combined_teams[i + 1]:
+        for champion in self.combined_teams:
+            if champion in champions_set:
                 is_duplicate_present = True
                 break
+            else:
+                champions_set.add(champion)
 
         self.assertEqual(is_duplicate_present, False)
 
