@@ -34,6 +34,8 @@ async def on_ready():
 
 # primary command, "generate"
 @bot.command(name='generate', aliases=['gen'], ignore_extra=False)
+# allow only 1 command call every 5 seconds per user
+@commands.cooldown(1, 5, commands.BucketType.user)
 async def generate(ctx, players_per_team: int, rerolls_per_player: int):
     # log author of command caller
     logger.log(ctx.message.author)
@@ -75,6 +77,9 @@ async def generate_error(ctx, error):
         error_msg = "Missing argument(s)! Please pass in 2 arguments! (e.g. \".gen 5 1\")"
     elif isinstance(error, commands.TooManyArguments):
         error_msg = "Too many arguments! Please pass in only 2 arguments! (e.g. \".gen 5 1\")"
+    elif isinstance(error, commands.CommandOnCooldown):
+        error_msg = f"Slow down! You may only send a command every 5 seconds!\n" \
+                    f"Try again in {error.retry_after:.2f} seconds!"
 
     embed = discord.Embed(title='Generation Error', color=0x879BC0)
     embed.add_field(name='Invalid Input', value=error_msg, inline=True)
